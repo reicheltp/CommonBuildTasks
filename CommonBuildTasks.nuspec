@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>CommonBuildTasks</id>
+    <version>0.0.0</version>
+    <title>CommonBuildTasks for Cake</title>
+    <authors>Paul Reichelt and contributors</authors>
+    <owners>Paul Reichelt</owners>
+    <description>A collection of common tasks for simple cake build scripts.</description>
+    <releaseNotes></releaseNotes>
+    <projectUrl>https://github.com/reicheltp/CommonBuildTasks</projectUrl>
+    <licenseUrl>https://raw.githubusercontent.com/reicheltp/CommonBuildTasks/master/LICENSE</licenseUrl>
+    <copyright>Copyright (c) 2016 Paul Reichelt</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+
+    <tags>cake build script task</tags>
+    <developmentDependency>false</developmentDependency>
+  </metadata>
+
+  <files>
+    <file src="src/shared.cake" target="lib\tools" />
+  </files>
+</package>
