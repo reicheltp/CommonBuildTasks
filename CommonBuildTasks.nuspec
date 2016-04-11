@@ -19,6 +19,6 @@
   </metadata>
 
   <files>
-    <file src="src/shared.cake" target="lib\tools" />
+    <file src="src/shared.cake" target="content" />
   </files>
 </package>

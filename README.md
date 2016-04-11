@@ -4,10 +4,22 @@ A collection of common build tasks for cake. This a allow you to create super si
 
 ### Sample
 
+Add the following lines to you build scripts after restoring cake
+
+./build.sh
+```bash
+mono $NUGET_EXE install CommonBuildTasks -Prerelease -ExcludeVersion -Out $TOOLS_DIR
+```
+
+./build.ps1
+```
+Invoke-Expression "$NUGET_EXE install CommonBuildTasks -Prerelease -ExcludeVersion -Out $TOOLS_DIR"
+```
+
+After this you can simply load the script within your cake file.
+
 ```cake
-// Import CommonBuildTasks
-#tool CommonBuildTasks
-#l tools\CommonBuildTasks\tools\shared.cake
+#l tools\CommonBuildTasks\content\shared.cake
 
 // Set your solution file
 Solution = "Sample.sln"
