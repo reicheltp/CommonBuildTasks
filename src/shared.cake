@@ -23,6 +23,8 @@ FilePath Solution = null;
 var Version = GitVersion();
 var NuSpecs = new List<FilePath>();
 var Tests = new List<FilePath>();
+var CustomNuGetFeedName = "CustomNugetFeed";
+string CustomNuGetFeed = null;
 
 FilePath DocFxConfig = File("./docs/docfx.json"); 
 var BuildVerbosity = Verbosity.Minimal;
@@ -33,6 +35,10 @@ var BuildVerbosity = Verbosity.Minimal;
 Setup(() => 
 {
     Information(string.Format("Building Version: {0} on branch {1}", Version.InformationalVersion, Version.BranchName));
+    
+    // Check if custom nuget feed is set
+    if(!string.IsNullOrEmpty(CustomNuGetFeed) && !NuGetHasSource(CustomNuGetFeed))
+        NuGetAddSource(CustomNuGetFeedName, CustomNuGetFeed);
 });
 
 // *********************
@@ -92,6 +98,7 @@ Task("default")
     .IsDependentOn("build")
     .IsDependentOn("test")
     .IsDependentOn("pack")
+    .IsDependentOn("push")
     .IsDependentOn("doc");
 
 /// <summary>
@@ -140,6 +147,37 @@ Task("pack")
         } );
     });
     
+/// <summary>
+///     Task to push stuff to NuGet
+/// </summary>
+Task("push")
+    .WithCriteria(() => 
+    {
+        var isReleaseBranch = Version.BranchName == "master" || Version.BranchName.StartsWith("release/");
+        
+        if(!isReleaseBranch)
+        {
+            Information("Push skipped. To push a package to NuGet build on master or release branch.");
+            return false;
+        }
+        
+        return true;
+    })
+    .Does(() =>
+    {
+        // Get the paths to the packages.
+        var packages = GetFiles("./output/artifacts/*.nupkg");
+                    
+        // Push the package.
+        if(string.IsNullOrEmpty(CustomNuGetFeed))
+            NuGetPush(packages, new NuGetPushSettings ());
+        else
+            NuGetPush(packages, new NuGetPushSettings 
+            {
+                Source = CustomNuGetFeed
+            });
+    });
+
 /// <summary>
 ///     Task to rebuild. Nothing else than a clean followed by build.
 /// </summary>
